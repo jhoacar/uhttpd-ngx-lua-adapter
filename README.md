@@ -1,4 +1,4 @@
-# OpenWRT uHTTPd server adapter for NGINX Lua module
+# OpenWRT uHTTPd server adapter for [NGINX Lua module](https://github.com/openresty/lua-nginx-module#nginx-api-for-lua)
 
 ## Basic Usage for Lapis framework integration
 
@@ -26,7 +26,8 @@
 ## Lapis dependencies
 
 ```bash
-    wget https://raw.githubusercontent.com/kikito/ansicolors.lua/master/ansicolors.lua -O $PATH_LIB/ansicolors.lua;`
+
+    wget https://raw.githubusercontent.com/kikito/ansicolors.lua/master/ansicolors.lua -O $PATH_LIB/ansicolors.lua;
 
     wget https://raw.githubusercontent.com/Tieske/date/master/src/date.lua -O $PATH_LIB/date.lua;
 
