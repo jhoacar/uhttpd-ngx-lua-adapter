@@ -1,5 +1,4 @@
 -- https://gitlab.com/rychly/uhttpd-lua-utils/-/blob/master/lua/uhttpd-request.lua
-
 local _M = {}
 
 function _M.uhttpd_recv_all(size)
@@ -22,6 +21,9 @@ function _M.uhttpd_urldecode(urlencoded)
 end
 
 function _M.parse_form_data(form_data, content_type)
+    if content_type ~= "application/x-www-form-urlencoded" then
+        return {}
+    end
     local parsed = {}
     for form_item in string.gmatch(form_data, "[^&]+") do
         local item_parts = string.gmatch(form_item, "[^=]+")
@@ -59,7 +61,7 @@ function _M.get_name_status(status)
 end
 
 function _M.is_correct_content_type(content_type)
-    return content_type == "application/x-www-form-urlencoded"
+    return content_type == "application/x-www-form-urlencoded" or content_type == "application/json"
 end
 
 function _M.cookies(env)
