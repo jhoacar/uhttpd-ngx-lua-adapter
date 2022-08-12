@@ -47,7 +47,7 @@
     wget https://github.com/jhoacar/uhttpd-ngx-lua-adapter/archive/refs/heads/master.zip -P /tmp && \
     unzip /tmp/master -d /tmp && \
     mkdir -p $PATH_LIB && \
-    cp -r /tmp/uhttpd-ngx-lua-adapter-master/uhttpd $PATH_LIB && \
+    cp -r /tmp/uhttpd-ngx-lua-adapter-master/nginx $PATH_LIB && \
     rm -rf /tmp/master /tmp/uhttpd-ngx-lua-adapter-master
 ```
 
