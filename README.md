@@ -73,7 +73,7 @@ require "luci.http"
 function handle_request(env)
    -- Using this global variable is loaded ngx variable environment
     env = vars
-    require("uhttpd.adapter")
+    require("nginx.uhttpd.adapter")
 
     local lapis = require("lapis")
     local app = lapis.Application()

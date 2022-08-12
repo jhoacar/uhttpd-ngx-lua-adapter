@@ -1,5 +1,5 @@
 -- Full documentation: https://github.com/openresty/lua-nginx-module#nginx-api-for-lua
-local util = require "uhttpd.util"
+local util = require "nginx.uhttpd.util"
 local req_body = nil
 
 ngx = {}
@@ -53,13 +53,22 @@ local contentType = "Content-Type"
 ngx.header = {}
 ngx.header[contentType] = "text/html"
 ngx.status = 200
+local status_sent = false
+local headers_sent = false
 ngx.print = function(content)
-    uhttpd.send("Status: " .. ngx.status .. util.get_name_status(ngx.status) .. "\r\n")
 
-    for key, value in pairs(ngx.header) do
-        uhttpd.send(key .. ": " .. value .. "\r\n")
+    if not status_sent then
+        uhttpd.send("Status: " .. ngx.status .. util.get_name_status(ngx.status) .. "\r\n")
+        status_sent = true
     end
-    uhttpd.send("\r\n\r\n")
+
+    if not headers_sent then
+        for key, value in pairs(ngx.header) do
+            uhttpd.send(key .. ": " .. value .. "\r\n")
+        end
+        uhttpd.send("\r\n\r\n")
+        headers_sent = true
+    end
     uhttpd.send(content)
 end
 
