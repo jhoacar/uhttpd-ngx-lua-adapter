@@ -70,12 +70,14 @@ config uhttpd 'main'
 
 require "luci.http"
 
-function handle_request(env)
+function handle_request(vars)
    -- Using this global variable is loaded ngx variable environment
     env = vars
-    require("nginx.uhttpd.adapter")
 
     local lapis = require("lapis")
+    
+    require("nginx.uhttpd.adapter")
+    
     local app = lapis.Application()
 
     app:match("/", function(self)
