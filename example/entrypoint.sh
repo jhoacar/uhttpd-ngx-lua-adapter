@@ -1,5 +1,7 @@
 #/bin/sh
 
+set -xeu
+
 opkg update
 opkg install uhttpd lua lpeg lua-cjson luaossl luasocket unzip
 
@@ -25,7 +27,7 @@ mkdir -p $PATH_LIB/resty && wget https://raw.githubusercontent.com/openresty/lua
 wget https://github.com/jhoacar/uhttpd-ngx-lua-adapter/archive/refs/heads/master.zip -P /tmp
 unzip /tmp/master -d /tmp
 cp -r /tmp/uhttpd-ngx-lua-adapter-master/nginx $PATH_LIB
-rm -rf /tmp/master /tmp/uhttpd-ngx-lua-adapter-master
+# rm -rf /tmp/master /tmp/uhttpd-ngx-lua-adapter-master
 
 # Server Configuration
 echo "" > /etc/config/uhttpd

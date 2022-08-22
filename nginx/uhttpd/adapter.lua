@@ -1,5 +1,8 @@
 -- Full documentation: https://github.com/openresty/lua-nginx-module#nginx-api-for-lua
 local util = require "nginx.uhttpd.util"
+
+env = util.getenv()
+
 local req_body = nil
 
 ngx = {}
@@ -19,8 +22,8 @@ ngx.var = {
 }
 ngx.req = {
     read_body = function()
-        if util.is_correct_content_type(env.CONTENT_TYPE) and not req_body then
-            req_body = util.uhttpd_recv_all(env.CONTENT_LENGTH)
+        if not req_body then
+            req_body = util.read_body(env.CONTENT_LENGTH)
             return req_body
         end
         return ""
@@ -32,7 +35,7 @@ ngx.req = {
         return env.headers or {}
     end,
     get_post_args = function(max)
-        return req_body and util.parse_form_data(req_body, env.CONTENT_TYPE) or {}
+        return {}
     end,
     get_uri_args = function(max)
         return env.QUERY_STRING and util.parse_form_data(env.QUERY_STRING) or {}
@@ -49,26 +52,27 @@ ngx.now = function()
 end
 ngx.escape_uri = nil
 ngx.sleep = 0
-local contentType = "Content-Type"
+local content_type = "Content-Type"
 ngx.header = {}
-ngx.header[contentType] = "text/html"
+ngx.header[content_type] = "text/html"
 ngx.status = 200
 local status_sent = false
 local headers_sent = false
+
 ngx.print = function(content)
 
     if not status_sent then
-        uhttpd.send("Status: " .. ngx.status .. util.get_name_status(ngx.status) .. "\r\n")
+        io.write("Status: " .. ngx.status .. util.get_name_status(ngx.status) .. "\r\n")
         status_sent = true
     end
 
     if not headers_sent then
         for key, value in pairs(ngx.header) do
-            uhttpd.send(key .. ": " .. value .. "\r\n")
+            io.write(key .. ": " .. value .. "\r\n")
         end
-        uhttpd.send("\r\n\r\n")
+        io.write("\r\n\r\n")
         headers_sent = true
     end
-    uhttpd.send(content)
+    io.write(content)
 end
 

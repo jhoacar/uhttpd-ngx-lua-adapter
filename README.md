@@ -4,7 +4,7 @@
 
 ## Packages necessary
 
-`opkg install uhttpd luci uhttpd-mod-lua lpeg lua-cjson luaossl luafilesystem luasocket unzip`
+`opkg install uhttpd lua lpeg lua-cjson luaossl luasocket unzip`
 
 ## Instalation
 
@@ -35,7 +35,7 @@
 
     wget https://raw.githubusercontent.com/leafo/loadkit/master/loadkit.lua -O $PATH_LIB/loadkit.lua;
 
-    mkdir -p $PATH_LIB/resty && wget https://raw.githubusercontent.com/openresty/lua-resty-upload/master/lib/resty/upload.lua -O $PATH_LIB/resty/upload.lua
+    mkdir -p $PATH_LIB/resty && wget https://raw.githubusercontent.com/openresty/lua-resty-upload/master/lib/resty/upload.lua -O $PATH_LIB/resty/upload.lua;
 
 ```
 
@@ -58,8 +58,10 @@
 config uhttpd 'main'
 	list listen_http '0.0.0.0:8080'
 	list listen_http '[::]:8080'
-	option home '/app'
-	list lua_prefix '/=/app/index.lua'
+	option home '/www'
+    option index_file '/index.lua'
+    option index_page 'index.lua'
+	list interpreter '.lua=/usr/bin/lua'
 ...
 ```
 
@@ -68,22 +70,15 @@ config uhttpd 'main'
 ```lua
 #!/usr/bin/lua
 
-require "luci.http"
+local lapis = require("lapis")
 
-function handle_request(vars)
-   -- Using this global variable is loaded ngx variable environment
-    env = vars
+require("nginx.uhttpd.adapter")
 
-    local lapis = require("lapis")
-    
-    require("nginx.uhttpd.adapter")
-    
-    local app = lapis.Application()
+local app = lapis.Application()
 
-    app:match("/", function(self)
-      return "Hello world!"
-    end)
-    
-    lapis.serve(app)
-end
+app:match("/", function(self)
+    return "Hello world!"
+end)
+
+lapis.serve(app)
 ```

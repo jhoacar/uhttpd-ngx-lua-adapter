@@ -3,8 +3,12 @@ version: '3'
 services:
   
   example:
-    image: openwrtorg/rootfs
+    image: openwrtorg/rootfs:x86-64
+    user: root
+    working_dir: /www
     restart: always
+    command: /sbin/init
+    container_name: example
     ports:
       - 8080:8080
     volumes:

@@ -1,13 +1,15 @@
 #!/usr/bin/lua
 
-local lapis = require("lapis")
+-- local lapis = require("lapis")
 
 require("nginx.uhttpd.adapter")
 
-local app = lapis.Application()
+ngx.print("Hello world!")
 
-app:match("/", function(self)
-    return "Hello world!"
-end)
+-- local app = lapis.Application()
 
-lapis.serve(app)
+-- app:match("/", function(self)
+--     return "Hello world!"
+-- end)
+
+-- lapis.serve(app)
